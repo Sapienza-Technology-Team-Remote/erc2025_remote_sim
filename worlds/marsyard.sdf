@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="my_custom_world">
+   
+    <!-- Modello custom -->
+    <model name="my_scene">
+      <static>true</static>
+      <link name="scene_link">
+      <pose>0 0 0 1.5708 0 0</pose> <!-- 1.5708 rad = 90 gradi -->
+
+        <!-- Visual: usa .glb -->
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file:///home/gianmarco/husarion_ws/src/erc2025_remote_sim/meshes/marsyard2024_processed.glb</uri>            
+            </mesh>
+          </geometry>
+        </visual>
+
+        <!-- Collision: usa .stl -->
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file:///home/gianmarco/husarion_ws/src/erc2025_remote_sim/meshes/marsyard2024_processed.glb</uri>            
+            </mesh>
+          </geometry>
+        </collision>
+
+      </link>
+    </model>
+
+  </world>
+</sdf>
