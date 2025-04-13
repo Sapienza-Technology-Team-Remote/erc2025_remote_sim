@@ -11,8 +11,13 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-install(DIRECTORY config launch meshes worlds
+install(DIRECTORY config launch models worlds
         DESTINATION share/${PROJECT_NAME})
+
+#Execute a script that set some environment varibales so that
+#Gazebo knows where to find models without writing absolute paths
+ament_environment_hooks(
+  "${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/env.sh.in")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

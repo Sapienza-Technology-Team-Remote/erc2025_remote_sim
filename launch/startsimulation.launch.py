@@ -60,7 +60,7 @@ def generate_launch_description():
     declare_gz_world_arg = DeclareLaunchArgument(
         "gz_world",
         default_value=PathJoinSubstitution(
-            [FindPackageShare("erc2025_remote_sim"), "worlds", "marsyard.sdf"]
+            [FindPackageShare("erc2025_remote_sim"), "worlds", "marsyard2024.world"]
         ),
         description="Absolute path to SDF world file.",
     )
