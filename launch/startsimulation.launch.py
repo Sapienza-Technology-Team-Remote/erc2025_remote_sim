@@ -6,7 +6,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, EnvironmentVariable
 from launch_ros.actions import SetUseSimTime
 from launch_ros.substitutions import FindPackageShare
-from nav2_common.launch import ReplaceString
 from launch.conditions import IfCondition
 
 
@@ -34,7 +33,6 @@ def launch_setup(context):
 
 def generate_launch_description():
 
-    # Dichiarare gli argomenti per la configurazione di Gazebo
     declare_gz_gui = DeclareLaunchArgument(
         "gz_gui",
         default_value=PathJoinSubstitution(
@@ -65,7 +63,6 @@ def generate_launch_description():
         description="Absolute path to SDF world file.",
     )
 
-    # Dichiarare gli argomenti per la simulazione del robot e RViz
     declare_namespace_arg = DeclareLaunchArgument(
         "namespace",
         default_value=EnvironmentVariable("ROBOT_NAMESPACE", default_value=""),
@@ -93,8 +90,13 @@ def generate_launch_description():
         choices=["True", "false", "False", "true"],
     )
 
-
-    # Lanciare RViz se specificato
+    declare_components_config_path_arg = DeclareLaunchArgument(
+    "components_config_path",
+    default_value=PathJoinSubstitution([
+        FindPackageShare("erc2025_remote_sim"), "config", "components.yaml"
+    ]),
+    description="Path to the components configuration file for robot simulation",
+)
     rviz_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([FindPackageShare("husarion_ugv_description"), "launch", "rviz.launch.py"])
@@ -105,17 +107,16 @@ def generate_launch_description():
         }.items(), 
     )
 
-    # Lanciare il robot
     simulate_robot = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([FindPackageShare("husarion_ugv_gazebo"), "launch", "simulate_robot.launch.py"])
         ),
         launch_arguments={
-            "log_level": LaunchConfiguration("log_level")
+            "log_level": LaunchConfiguration("log_level"),
+            "components_config_path": LaunchConfiguration("components_config_path"),
         }.items(), 
     )
 
-    # Launch setup function to handle the gazebo simulation details
     launch_simulation = OpaqueFunction(function=launch_setup)
 
     actions = [
@@ -127,10 +128,11 @@ def generate_launch_description():
         declare_robot_model_arg,
         declare_log_level_arg,
         declare_use_rviz_arg,
+        declare_components_config_path_arg,
         SetUseSimTime(True), 
         rviz_launch,
         simulate_robot,
-        launch_simulation, 
+        launch_simulation,
     ]
 
     return LaunchDescription(actions)
