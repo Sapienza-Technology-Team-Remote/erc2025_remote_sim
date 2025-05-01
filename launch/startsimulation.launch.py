@@ -77,6 +77,7 @@ def generate_launch_description():
     declare_pitch_arg = DeclareLaunchArgument("pitch", default_value=str(P), description="Pitch orientation")
     declare_yaw_arg = DeclareLaunchArgument("yaw", default_value=str(Y), description="Yaw orientation")
 
+    declare_ekf= DeclareLaunchArgument("use_ekf", default_value="false", description="Disable_ekf")
 
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -146,12 +147,13 @@ def generate_launch_description():
         declare_roll_arg,
         declare_pitch_arg,
         declare_yaw_arg,
+        declare_ekf,
         SetUseSimTime(True),
         gz_sim,
         gz_bridge,
-        simulate_robot,
         rviz_launch,
-        gz_image_bridge_node
+        gz_image_bridge_node,
+        simulate_robot
     ]
 
     return LaunchDescription(actions)
