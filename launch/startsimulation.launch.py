@@ -53,30 +53,30 @@ def generate_launch_description():
         description="Path to the components configuration file for robot simulation",
     )
 
+    declare_start_location_arg = DeclareLaunchArgument(
+        "start_location",
+       default_value="1",
+        description="Start location ID (1, 2, 3, 4)",
+       choices=["1", "2", "3", "4"],
+    )
     
-    #declare_start_location_arg = DeclareLaunchArgument(
-    #    "start_location",
-    #    default_value="1",
-    #    description="Start location ID (1, 2, 3, 4)",
-    #    choices=["1", "2", "3", "4"],
-    #)
+    start_location = LaunchConfiguration("start_location")
+    package_share_directory = FindPackageShare("erc2025_remote_sim").find("erc2025_remote_sim")
+    locations_file_path = os.path.join(package_share_directory, "config", "start_locations.yaml")
+    with open(locations_file_path, 'r') as file:
+        locations = yaml.safe_load(file)["locations"]
+    location_params = locations.get(start_location, locations[1])
+    
+    x, y, z = location_params["position"]
+    R, P, Y = location_params["orientation"]
 
-    #start_location = LaunchConfiguration("start_location")
-    #package_share_directory = FindPackageShare("erc2025_remote_sim").find("erc2025_remote_sim")
-    #locations_file_path = os.path.join(package_share_directory, "config", "start_locations.yaml")
-    #with open(locations_file_path, 'r') as file:
-    #    locations = yaml.safe_load(file)["locations"]
-    #location_params = locations.get(start_location, locations[1])
-    #
-    #x, y, z = location_params["position"]
-    #R, P, Y = location_params["orientation"]
+    declare_x_arg = DeclareLaunchArgument("x", default_value=str(x), description="X position")
+    declare_y_arg = DeclareLaunchArgument("y", default_value=str(y), description="Y position")
+    declare_z_arg = DeclareLaunchArgument("z", default_value=str(z), description="Z position")
+    declare_roll_arg = DeclareLaunchArgument("roll", default_value=str(R), description="Roll orientation")
+    declare_pitch_arg = DeclareLaunchArgument("pitch", default_value=str(P), description="Pitch orientation")
+    declare_yaw_arg = DeclareLaunchArgument("yaw", default_value=str(Y), description="Yaw orientation")
 
-    #declare_x_arg = DeclareLaunchArgument("x", default_value=x, description="X position")
-    #declare_y_arg = DeclareLaunchArgument("y", default_value=y, description="Y position")
-    #declare_z_arg = DeclareLaunchArgument("z", default_value=z, description="Z position")
-    #declare_roll_arg = DeclareLaunchArgument("roll", default_value=R, description="Roll orientation")
-    #declare_pitch_arg = DeclareLaunchArgument("pitch", default_value=P, description="Pitch orientation")
-    #declare_yaw_arg = DeclareLaunchArgument("yaw", default_value=Y, description="Yaw orientation")
 
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -107,12 +107,6 @@ def generate_launch_description():
         launch_arguments={
             "log_level": LaunchConfiguration("log_level"),
             "components_config_path": LaunchConfiguration("components_config_path"),
-            #"x": LaunchConfiguration("x"),
-            #"y": LaunchConfiguration("y"),
-            #"z": LaunchConfiguration("z"),
-            #"roll": LaunchConfiguration("roll"),
-            #"pitch": LaunchConfiguration("pitch"),
-            #"yaw": LaunchConfiguration("yaw"),
         }.items(),
     )
 
@@ -145,7 +139,13 @@ def generate_launch_description():
         declare_namespace_arg,
         declare_use_rviz_arg,
         declare_components_config_path_arg,
-        #declare_start_location_arg,
+        declare_start_location_arg,
+        declare_x_arg,
+        declare_y_arg,
+        declare_z_arg,
+        declare_roll_arg,
+        declare_pitch_arg,
+        declare_yaw_arg,
         SetUseSimTime(True),
         gz_sim,
         gz_bridge,
