@@ -126,6 +126,19 @@ def generate_launch_description():
         }.items(),
     )
 
+    gz_image_bridge_node = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=[
+            "/front_cam/zed_node/rgb/image_rect_color",
+        ],
+        output="screen",
+        parameters=[
+            {'use_sim_time': True},
+            {'front_cam.zed_node.rgb.image_rect_color.compressed.jpeg_quality': 75},
+        ],
+    )
+
     actions = [
         declare_gz_gui,
         declare_log_level_arg,
@@ -138,6 +151,7 @@ def generate_launch_description():
         gz_bridge,
         simulate_robot,
         rviz_launch,
+        gz_image_bridge_node
     ]
 
     return LaunchDescription(actions)
