@@ -9,12 +9,20 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
 )
-from launch_ros.actions import Node, SetUseSimTime
+from launch_ros.actions import Node, SetUseSimTime, SetParameter
 from launch_ros.substitutions import FindPackageShare
 import yaml
 import os
 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    declare_use_sim_time_arg = DeclareLaunchArgument(
+        "use_sim_time",
+        default_value=use_sim_time,
+        description="Use simulation clock if true",
+        choices=["true", "false"],
+    )
+
 
     gz_gui = LaunchConfiguration("gz_gui")
     declare_gz_gui = DeclareLaunchArgument(
@@ -91,15 +99,17 @@ def generate_launch_description():
         }.items(),
     )
 
-    gz_bridge_config = PathJoinSubstitution(
-        [FindPackageShare("husarion_ugv_gazebo"), "config", "gz_bridge.yaml"]
-    )
-    gz_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        name="gz_bridge",
-        parameters=[{"config_file": gz_bridge_config}],
-    )
+    #TODO GZ bridge is called automatically?
+    #if uncommented there are two gz_bridge nodes that cause problems
+    # gz_bridge_config = PathJoinSubstitution(
+    #     [FindPackageShare("husarion_ugv_gazebo"), "config", "gz_bridge.yaml"]
+    # )
+    # gz_bridge = Node(
+    #     package="ros_gz_bridge",
+    #     executable="parameter_bridge",
+    #     name="gz_bridge",
+    #     parameters=[{"config_file": gz_bridge_config}],
+    # )
 
     simulate_robot = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -135,6 +145,7 @@ def generate_launch_description():
     )
 
     actions = [
+        declare_use_sim_time_arg,
         declare_gz_gui,
         declare_log_level_arg,
         declare_namespace_arg,
@@ -148,12 +159,14 @@ def generate_launch_description():
         declare_pitch_arg,
         declare_yaw_arg,
         declare_ekf,
-        SetUseSimTime(True),
+        SetParameter(name='use_sim_time', value=use_sim_time),
+        #SetUseSimTime(True),
         gz_sim,
-        gz_bridge,
+        #gz_bridge,
         rviz_launch,
         gz_image_bridge_node,
         simulate_robot
+    
     ]
 
     return LaunchDescription(actions)
