@@ -1,11 +1,11 @@
 components:
 
-  - type: CAM06
-    name: camera
-    parent_link: mount_link
-    xyz: "0.2 0.0 0.1"
-    rpy: "0.0 0.0 0.0"
-    device_namespace: front_cam
+  #- type: CAM06
+  #  name: camera
+  #  parent_link: mount_link
+  #  xyz: "0.2 0.0 0.1"
+  #  rpy: "0.0 0.0 0.0"
+  #  device_namespace: front_cam
 
  # - type: CAM06
  #   name: camera
@@ -27,3 +27,10 @@ components:
  #   xyz: "0.0 -0.2 0.1"
  #   rpy: "0.0 0.0 -1.5708"
  #   device_namespace: right_cam
+
+  - type: LDR20
+    name: lidar
+    parent_link: mount_link
+    xyz: "0.0 0.0 0.0"
+    rpy: "0.0 0.0 0.0"
+    device_namespace: lidar
