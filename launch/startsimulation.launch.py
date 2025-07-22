@@ -232,7 +232,7 @@ def generate_launch_description():
         #gz_bridge,
         clock_bridge,
         rviz_launch,
-        #gz_image_bridge_node,
+        gz_image_bridge_node,
         simulate_robot,
         #create_pointcloud_node
         OpaqueFunction(function=fix_velodyne_tf),
