@@ -50,7 +50,7 @@ def generate_launch_description():
 
     declare_namespace_arg = DeclareLaunchArgument(
         "namespace",
-        default_value=EnvironmentVariable("ROBOT_NAMESPACE", default_value="panther"),
+        default_value=EnvironmentVariable("ROBOT_NAMESPACE", default_value=""),
         description="Add namespace to all launched nodes.",
     )
 
@@ -195,8 +195,8 @@ def generate_launch_description():
         if namespace.startswith("/"):
             namespace = namespace[1:]
 
-        parent_frame = f"{namespace}/base_link"
-        child_frame = f"{namespace}/base_link/panther/lidar_velodyne_puck_sensor"  
+        parent_frame = f"{namespace}/lidar_velodyne_puck_link"
+        child_frame = f"{namespace}/base_link/lidar_velodyne_puck_sensor"  
 
         return [
             Node(
