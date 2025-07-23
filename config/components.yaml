@@ -9,7 +9,7 @@ components:
   - type: LDR20
     name: lidar
     parent_link: mount_link
-    xyz: "0.0 0.0 0.0"
+    xyz: "0.0 0.0 0.2"
     rpy: "0.0 0.0 0.0"
     device_namespace: lidar
 

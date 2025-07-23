@@ -212,6 +212,7 @@ def generate_launch_description():
 
 
     actions = [
+        SetParameter(name='use_sim_time', value=use_sim_time),
         declare_use_sim_time_arg,
         declare_gz_gui,
         declare_log_level_arg,
@@ -226,11 +227,8 @@ def generate_launch_description():
         declare_pitch_arg,
         declare_yaw_arg,
         declare_ekf,
-        #SetParameter(name='use_sim_time', value=use_sim_time),
-        SetUseSimTime(True),
         gz_sim,
-        #gz_bridge,
-        clock_bridge,
+        #clock_bridge,
         rviz_launch,
         gz_image_bridge_node,
         simulate_robot,
