@@ -133,7 +133,7 @@ def generate_launch_description():
 
     # 5 seconds delay 
     simulate_robot = TimerAction(
-        period=5.0,
+        period=3.0,
         actions=[simulate_robot_launch],
     )
 
@@ -228,10 +228,10 @@ def generate_launch_description():
         declare_yaw_arg,
         declare_ekf,
         gz_sim,
-        #clock_bridge,
+        clock_bridge,
+        simulate_robot,
         rviz_launch,
         gz_image_bridge_node,
-        simulate_robot,
         #create_pointcloud_node
         OpaqueFunction(function=fix_velodyne_tf),
 
