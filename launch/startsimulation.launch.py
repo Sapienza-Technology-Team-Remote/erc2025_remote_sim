@@ -131,7 +131,7 @@ def generate_launch_description():
         }.items(),
     )
 
-    # 5 seconds delay 
+    # 3 seconds delay 
     simulate_robot = TimerAction(
         period=3.0,
         actions=[simulate_robot_launch],
@@ -228,7 +228,7 @@ def generate_launch_description():
         declare_yaw_arg,
         declare_ekf,
         gz_sim,
-        clock_bridge,
+        #clock_bridge,
         simulate_robot,
         rviz_launch,
         gz_image_bridge_node,
